@@ -16,7 +16,7 @@ namespace ExpanseTracker
             InitializeComponent();
             textBox1.PlaceholderText = "Enter name";
             textBox2.PlaceholderText = "Enter amount";
-            LoadExpenses();  
+            LoadExpenses();
             UpdateTotal();
         }
         private void button1_Click(object sender, EventArgs e)
@@ -33,7 +33,7 @@ namespace ExpanseTracker
             expenses.Add(newExpense);
             listBox1.Items.Add(newExpense);
 
-            SaveExpenses(); 
+            SaveExpenses();
             UpdateTotal();
             textBox1.Clear();
             textBox2.Clear();
@@ -88,16 +88,78 @@ namespace ExpanseTracker
         {
             public string Name { get; set; }
             public decimal Amount { get; set; }
+            public DateTime Date { get; set; }
 
             public Expense(string name, decimal amount)
             {
                 Name = name;
                 Amount = amount;
+                Date = DateTime.Now;
             }
             public override string ToString()
             {
-                return $"{Name} - {Amount}";
+                return $"{Date.ToShortDateString()} - {Name} - {Amount}";
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DateTime from = dateTimePickerfrom.Value.Date;
+            DateTime to = dateTimePickerto.Value.Date;
+            decimal total = 0;
+            listBox1.Items.Clear();
+
+            foreach (var a in expenses)
+            {
+                if (a.Date >= from && a.Date <= to)
+                {
+                    listBox1.Items.Add(a);
+                    total += a.Amount;
+                }
+            }
+            label1.Text = $"Total (Filtered): {total}";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem is Expense selectedExpense)
+            {
+                expenses.Remove(selectedExpense);
+                listBox1.Items.Remove(selectedExpense);
+                SaveExpenses();
+                UpdateTotal();
+            }
+            else
+            {
+                MessageBox.Show("Please select an expense to delete.");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem is Expense selectedExpense)
+            {
+                using (Form2 form2 = new Form2(selectedExpense))
+                {
+                    if (form2.ShowDialog() == DialogResult.OK)
+                    {
+                        listBox1.Items[listBox1.SelectedIndex] = form2.EditedExpense;
+                        UpdateTotal();
+                        SaveExpenses();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select an expense to edit.");
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Chart chartform = new Chart();
+            chartform.LoadData(expenses);
+            chartform.ShowDialog();
         }
     }
 }

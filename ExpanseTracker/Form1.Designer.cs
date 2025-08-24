@@ -33,6 +33,12 @@
             button1 = new Button();
             listBox1 = new ListBox();
             label1 = new Label();
+            button3 = new Button();
+            dateTimePickerfrom = new DateTimePicker();
+            dateTimePickerto = new DateTimePicker();
+            button2 = new Button();
+            button4 = new Button();
+            button5 = new Button();
             SuspendLayout();
             // 
             // textBox1
@@ -51,9 +57,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(57, 331);
+            button1.Location = new Point(23, 169);
             button1.Name = "button1";
-            button1.Size = new Size(87, 34);
+            button1.Size = new Size(87, 29);
             button1.TabIndex = 2;
             button1.Text = "Add";
             button1.UseVisualStyleBackColor = true;
@@ -70,17 +76,77 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(466, 338);
+            label1.Location = new Point(466, 294);
             label1.Name = "label1";
             label1.Size = new Size(50, 20);
             label1.TabIndex = 4;
             label1.Text = "label1";
+            // 
+            // button3
+            // 
+            button3.Location = new Point(23, 226);
+            button3.Name = "button3";
+            button3.Size = new Size(113, 29);
+            button3.TabIndex = 6;
+            button3.Text = "Filter by date";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // dateTimePickerfrom
+            // 
+            dateTimePickerfrom.Location = new Point(23, 271);
+            dateTimePickerfrom.Name = "dateTimePickerfrom";
+            dateTimePickerfrom.Size = new Size(250, 27);
+            dateTimePickerfrom.TabIndex = 7;
+            // 
+            // dateTimePickerto
+            // 
+            dateTimePickerto.Location = new Point(23, 331);
+            dateTimePickerto.Name = "dateTimePickerto";
+            dateTimePickerto.Size = new Size(250, 27);
+            dateTimePickerto.TabIndex = 8;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(249, 167);
+            button2.Name = "button2";
+            button2.Size = new Size(94, 29);
+            button2.TabIndex = 9;
+            button2.Text = "Delete ";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(133, 169);
+            button4.Name = "button4";
+            button4.Size = new Size(94, 29);
+            button4.TabIndex = 10;
+            button4.Text = "Edit";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(325, 332);
+            button5.Name = "button5";
+            button5.Size = new Size(117, 29);
+            button5.TabIndex = 11;
+            button5.Text = "Show Chart ";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button5);
+            Controls.Add(button4);
+            Controls.Add(button2);
+            Controls.Add(dateTimePickerto);
+            Controls.Add(dateTimePickerfrom);
+            Controls.Add(button3);
             Controls.Add(label1);
             Controls.Add(listBox1);
             Controls.Add(button1);
@@ -99,5 +165,11 @@
         private Button button1;
         private ListBox listBox1;
         private Label label1;
+        private Button button3;
+        private DateTimePicker dateTimePickerfrom;
+        private DateTimePicker dateTimePickerto;
+        private Button button2;
+        private Button button4;
+        private Button button5;
     }
 }
