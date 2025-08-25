@@ -39,25 +39,27 @@
             button2 = new Button();
             button4 = new Button();
             button5 = new Button();
+            button6 = new Button();
+            panel1 = new Panel();
             SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(23, 43);
+            textBox1.Location = new Point(23, 25);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(174, 27);
             textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(23, 113);
+            textBox2.Location = new Point(229, 25);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(174, 27);
             textBox2.TabIndex = 1;
             // 
             // button1
             // 
-            button1.Location = new Point(23, 169);
+            button1.Location = new Point(23, 91);
             button1.Name = "button1";
             button1.Size = new Size(87, 29);
             button1.TabIndex = 2;
@@ -68,23 +70,24 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(466, 12);
+            listBox1.Location = new Point(466, 58);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(322, 264);
+            listBox1.Size = new Size(378, 304);
             listBox1.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(466, 294);
+            label1.Location = new Point(466, 421);
             label1.Name = "label1";
             label1.Size = new Size(50, 20);
             label1.TabIndex = 4;
             label1.Text = "label1";
+            label1.Click += label1_Click;
             // 
             // button3
             // 
-            button3.Location = new Point(23, 226);
+            button3.Location = new Point(12, 182);
             button3.Name = "button3";
             button3.Size = new Size(113, 29);
             button3.TabIndex = 6;
@@ -94,21 +97,21 @@
             // 
             // dateTimePickerfrom
             // 
-            dateTimePickerfrom.Location = new Point(23, 271);
+            dateTimePickerfrom.Location = new Point(12, 228);
             dateTimePickerfrom.Name = "dateTimePickerfrom";
             dateTimePickerfrom.Size = new Size(250, 27);
             dateTimePickerfrom.TabIndex = 7;
             // 
             // dateTimePickerto
             // 
-            dateTimePickerto.Location = new Point(23, 331);
+            dateTimePickerto.Location = new Point(12, 307);
             dateTimePickerto.Name = "dateTimePickerto";
             dateTimePickerto.Size = new Size(250, 27);
             dateTimePickerto.TabIndex = 8;
             // 
             // button2
             // 
-            button2.Location = new Point(249, 167);
+            button2.Location = new Point(284, 91);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 9;
@@ -118,7 +121,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(133, 169);
+            button4.Location = new Point(147, 91);
             button4.Name = "button4";
             button4.Size = new Size(94, 29);
             button4.TabIndex = 10;
@@ -128,19 +131,38 @@
             // 
             // button5
             // 
-            button5.Location = new Point(325, 332);
+            button5.Location = new Point(147, 149);
             button5.Name = "button5";
-            button5.Size = new Size(117, 29);
+            button5.Size = new Size(94, 29);
             button5.TabIndex = 11;
             button5.Text = "Show Chart ";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
+            // button6
+            // 
+            button6.Location = new Point(720, 12);
+            button6.Name = "button6";
+            button6.Size = new Size(133, 27);
+            button6.TabIndex = 12;
+            button6.Text = "Dark mode";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // panel1
+            // 
+            panel1.Location = new Point(-1, 472);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(263, 30);
+            panel1.TabIndex = 13;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(856, 505);
+            Controls.Add(panel1);
+            Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(button2);
@@ -171,5 +193,7 @@
         private Button button2;
         private Button button4;
         private Button button5;
+        private Button button6;
+        private Panel panel1;
     }
 }

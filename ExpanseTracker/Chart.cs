@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +15,23 @@ namespace ExpanseTracker
 {
     public partial class Chart : Form
     {
-        public Chart()
+        public Chart(bool darkmode)
         {
             InitializeComponent();
+            if (darkmode)
+            {
+                this.BackColor = Color.FromArgb(30, 30, 30);
+                this.ForeColor = Color.White;
+            }
+            else
+            {
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
+            }
         }
         public void LoadData(List<Expense> expenses)
         {
+            
             chart1.Series.Clear();
 
             Series series = new Series("Expenses by Date");

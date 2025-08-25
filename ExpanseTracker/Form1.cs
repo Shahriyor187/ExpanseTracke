@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ExpanseTracker
 {
@@ -10,7 +11,7 @@ namespace ExpanseTracker
     {
         private List<Expense> expenses = new List<Expense>();
         private string dataFile = "expenses.json";
-
+        bool isDarkMode = false;
         public Form1()
         {
             InitializeComponent();
@@ -139,13 +140,14 @@ namespace ExpanseTracker
         {
             if (listBox1.SelectedItem is Expense selectedExpense)
             {
-                using (Form2 form2 = new Form2(selectedExpense))
+                using (Form2 form2 = new Form2(selectedExpense, isDarkMode, this))
                 {
                     if (form2.ShowDialog() == DialogResult.OK)
                     {
                         listBox1.Items[listBox1.SelectedIndex] = form2.EditedExpense;
                         UpdateTotal();
                         SaveExpenses();
+                        ShowTooltip("Expense updated successfully!");
                     }
                 }
             }
@@ -157,9 +159,66 @@ namespace ExpanseTracker
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Chart chartform = new Chart();
+            Chart chartform = new Chart(isDarkMode);
             chartform.LoadData(expenses);
             chartform.ShowDialog();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            isDarkMode = !isDarkMode;
+
+            foreach (Form frm in Application.OpenForms)
+            {
+                frm.BackColor = isDarkMode ? Color.FromArgb(30, 30, 30) : Color.White;
+                frm.ForeColor = isDarkMode ? Color.White : Color.Black;
+
+                ApplyTheme(frm, isDarkMode);
+            }
+        }
+        private void ApplyTheme(Control parent, bool darkMode)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (darkMode)
+                {
+                    ctrl.ForeColor = Color.White;
+
+                    if (ctrl is Button)
+                        ctrl.BackColor = Color.FromArgb(45, 45, 45);
+                    else if (ctrl is ListBox)
+                        ctrl.BackColor = Color.FromArgb(40, 40, 40);
+                    else
+                        ctrl.BackColor = Color.FromArgb(30, 30, 30);
+                    button6.Text = "Switch to Light";
+                }
+                else
+                {
+                    ctrl.ForeColor = Color.Black;
+
+                    if (ctrl is Button)
+                        ctrl.BackColor = SystemColors.Control;
+                    else if (ctrl is ListBox)
+                        ctrl.BackColor = Color.White;
+                    else
+                        ctrl.BackColor = Color.White;
+                    button6.Text = "Switch to Dark";
+                }
+
+                if (ctrl.HasChildren)
+                    ApplyTheme(ctrl, darkMode);
+            }
+        }
+        public void ShowTooltip(string message)
+        {
+            ToolTip tooltip = new ToolTip();
+            tooltip.Show(message, this, 100, 50, 2000); // 2 seconds
+        }
+
     }
 }
