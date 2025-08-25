@@ -1,3 +1,4 @@
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,25 +13,62 @@ namespace ExpanseTracker
         private List<Expense> expenses = new List<Expense>();
         private string dataFile = "expenses.json";
         bool isDarkMode = false;
+        private ErrorProvider errorProvider = new ErrorProvider();
+
         public Form1()
         {
             InitializeComponent();
             textBox1.PlaceholderText = "Enter name";
             textBox2.PlaceholderText = "Enter amount";
+            textBox3.PlaceholderText = "Enter category";
             LoadExpenses();
             UpdateTotal();
+        }
+        public class Expense
+        {
+            public string Name { get; set; }
+            public decimal Amount { get; set; }
+            public DateTime Date { get; set; }
+            public string Category { get; set; }
+
+            public Expense(string name, decimal amount, string category)
+            {
+                Name = name;
+                Amount = amount;
+                Date = DateTime.Now;
+                Category = category;
+            }
+            public override string ToString()
+            {
+                return $"{Date.ToShortDateString()} - {Name} - {Category} - {Amount}";
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
             string name = textBox1.Text;
+            string category = textBox3.Text;
             decimal amount;
             if (!decimal.TryParse(textBox2.Text, out amount))
             {
-                MessageBox.Show("Please enter a valid amount.");
+                errorProvider.SetError(textBox2, "Please enter a valid amount");
+                return;
+            }
+            bool hasLetter = false;
+            foreach (char c in name)
+            {
+                if (char.IsLetter(c))
+                {
+                    hasLetter = true;
+                    break;
+                }
+            }
+            if (!hasLetter)
+            {
+                errorProvider.SetError(textBox1, "Please enter a name");
                 return;
             }
 
-            Expense newExpense = new Expense(name, amount);
+            Expense newExpense = new Expense(name, amount, category);
             expenses.Add(newExpense);
             listBox1.Items.Add(newExpense);
 
@@ -38,6 +76,7 @@ namespace ExpanseTracker
             UpdateTotal();
             textBox1.Clear();
             textBox2.Clear();
+            textBox3.Clear();
         }
 
         private void UpdateTotal()
@@ -84,25 +123,6 @@ namespace ExpanseTracker
                 }
             }
         }
-
-        public class Expense
-        {
-            public string Name { get; set; }
-            public decimal Amount { get; set; }
-            public DateTime Date { get; set; }
-
-            public Expense(string name, decimal amount)
-            {
-                Name = name;
-                Amount = amount;
-                Date = DateTime.Now;
-            }
-            public override string ToString()
-            {
-                return $"{Date.ToShortDateString()} - {Name} - {Amount}";
-            }
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             DateTime from = dateTimePickerfrom.Value.Date;
@@ -220,5 +240,55 @@ namespace ExpanseTracker
             tooltip.Show(message, this, 100, 50, 2000); // 2 seconds
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(dataFile))
+            {
+                MessageBox.Show("No expenses found to export.");
+                return;
+            }
+
+            string json = File.ReadAllText(dataFile);
+            List<Expense> expenses = JsonSerializer.Deserialize<List<Expense>>(json);
+
+            if (expenses == null || expenses.Count == 0)
+            {
+                MessageBox.Show("No expenses found to export.");
+                return;
+            }
+
+            ExcelPackage.License.SetNonCommercialPersonal("Myspentmoney");
+
+            using (var package = new ExcelPackage())
+            {
+                var ws = package.Workbook.Worksheets.Add("Expenses");
+                ws.Cells[1, 1].Value = "Date";
+                ws.Cells[1, 2].Value = "Name";
+                ws.Cells[1, 3].Value = "Category";
+                ws.Cells[1, 4].Value = "Amount";
+
+                int row = 2;
+                foreach (var exp in expenses)
+                {
+                    ws.Cells[row, 1].Value = exp.Date.ToShortDateString();
+                    ws.Cells[row, 2].Value = exp.Name;
+                    ws.Cells[row, 3].Value = exp.Category;
+                    ws.Cells[row, 4].Value = exp.Amount;
+                    row++;
+                }
+
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "Excel Workbook|*.xlsx";
+                    sfd.FileName = "Expenses.xlsx";
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo file = new FileInfo(sfd.FileName);
+                        package.SaveAs(file);
+                        MessageBox.Show("Excel exported successfully!");
+                    }
+                }
+            }
+        }
     }
 }

@@ -31,25 +31,28 @@ namespace ExpanseTracker
         }
         public void LoadData(List<Expense> expenses)
         {
-            
+
             chart1.Series.Clear();
 
-            Series series = new Series("Expenses by Date");
-            series.ChartType = SeriesChartType.SplineArea;
+            Series series = new Series("Expenses by Category");
+            series.ChartType = SeriesChartType.Pie;
+            series.IsValueShownAsLabel = true;
+            series.IsValueShownAsLabel = true;
+            series.Label = "#VALY";   // only show the amount 
+            series["PieLabelStyle"] = "Inside";  // keep labels inside slices
+            chart1.Legends[0].Enabled = true;    // show category names in legend
             chart1.Series.Add(series);
 
             var grouped = expenses
-                .GroupBy(e => e.Date.Date)
-                .Select(g => new { Date = g.Key, Total = g.Sum(e => e.Amount) })
-                .OrderBy(x => x.Date);
+                .GroupBy(e => e.Category)
+                .Select(g => new { Category = g.Key, Total = g.Sum(e => e.Amount) })
+                .OrderBy(x => x.Category);
 
             foreach (var item in grouped)
             {
-                series.Points.AddXY(item.Date.ToShortDateString(), item.Total);
+                int pointIndex = series.Points.AddXY(item.Category, item.Total);
+                series.Points[pointIndex].LegendText = item.Category; // show category in legend
             }
-
-            chart1.ChartAreas[0].AxisX.Title = "Date";
-            chart1.ChartAreas[0].AxisY.Title = "Total Amount ($)";
         }
         private void chart1_Click(object sender, EventArgs e)
         {

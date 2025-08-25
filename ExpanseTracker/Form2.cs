@@ -33,8 +33,10 @@ namespace ExpanseTracker
             mainform = form1;
             textBox1.PlaceholderText = "Enter name";
             textBox2.PlaceholderText = "Enter amount";
+            textBox3.PlaceholderText = "Enter category";
             textBox1.Text = expense.Name;
             textBox2.Text = expense.Amount.ToString();
+            textBox3.Text = expense.Category;
             dateTimePicker1.Value = expense.Date;
 
             EditedExpense = expense;

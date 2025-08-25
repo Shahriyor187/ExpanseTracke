@@ -32,13 +32,14 @@
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             dateTimePicker1 = new DateTimePicker();
+            textBox3 = new TextBox();
             SuspendLayout();
             // 
             // button1
             // 
             button1.Location = new Point(268, 245);
             button1.Name = "button1";
-            button1.Size = new Size(90, 34);
+            button1.Size = new Size(98, 34);
             button1.TabIndex = 0;
             button1.Text = "Save";
             button1.UseVisualStyleBackColor = true;
@@ -53,23 +54,31 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(12, 83);
+            textBox2.Location = new Point(12, 81);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(180, 27);
             textBox2.TabIndex = 2;
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(367, 42);
+            dateTimePicker1.Location = new Point(397, 22);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(250, 27);
             dateTimePicker1.TabIndex = 3;
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(12, 145);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(180, 27);
+            textBox3.TabIndex = 4;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(694, 341);
+            ClientSize = new Size(694, 314);
+            Controls.Add(textBox3);
             Controls.Add(dateTimePicker1);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
@@ -86,5 +95,6 @@
         private TextBox textBox1;
         private TextBox textBox2;
         private DateTimePicker dateTimePicker1;
+        private TextBox textBox3;
     }
 }

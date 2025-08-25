@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             button1 = new Button();
@@ -40,26 +41,29 @@
             button4 = new Button();
             button5 = new Button();
             button6 = new Button();
-            panel1 = new Panel();
+            button7 = new Button();
+            textBox3 = new TextBox();
+            errorProvider1 = new ErrorProvider(components);
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(23, 25);
+            textBox1.Location = new Point(4, 12);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(174, 27);
             textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(229, 25);
+            textBox2.Location = new Point(201, 12);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(174, 27);
             textBox2.TabIndex = 1;
             // 
             // button1
             // 
-            button1.Location = new Point(23, 91);
+            button1.Location = new Point(12, 78);
             button1.Name = "button1";
             button1.Size = new Size(87, 29);
             button1.TabIndex = 2;
@@ -72,13 +76,13 @@
             listBox1.FormattingEnabled = true;
             listBox1.Location = new Point(466, 58);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(378, 304);
+            listBox1.Size = new Size(378, 324);
             listBox1.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(466, 421);
+            label1.Location = new Point(466, 401);
             label1.Name = "label1";
             label1.Size = new Size(50, 20);
             label1.TabIndex = 4;
@@ -87,9 +91,9 @@
             // 
             // button3
             // 
-            button3.Location = new Point(12, 182);
+            button3.Location = new Point(12, 210);
             button3.Name = "button3";
-            button3.Size = new Size(113, 29);
+            button3.Size = new Size(107, 29);
             button3.TabIndex = 6;
             button3.Text = "Filter by date";
             button3.UseVisualStyleBackColor = true;
@@ -97,21 +101,21 @@
             // 
             // dateTimePickerfrom
             // 
-            dateTimePickerfrom.Location = new Point(12, 228);
+            dateTimePickerfrom.Location = new Point(4, 256);
             dateTimePickerfrom.Name = "dateTimePickerfrom";
             dateTimePickerfrom.Size = new Size(250, 27);
             dateTimePickerfrom.TabIndex = 7;
             // 
             // dateTimePickerto
             // 
-            dateTimePickerto.Location = new Point(12, 307);
+            dateTimePickerto.Location = new Point(4, 326);
             dateTimePickerto.Name = "dateTimePickerto";
             dateTimePickerto.Size = new Size(250, 27);
             dateTimePickerto.TabIndex = 8;
             // 
             // button2
             // 
-            button2.Location = new Point(284, 91);
+            button2.Location = new Point(281, 78);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 9;
@@ -121,7 +125,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(147, 91);
+            button4.Location = new Point(147, 78);
             button4.Name = "button4";
             button4.Size = new Size(94, 29);
             button4.TabIndex = 10;
@@ -131,7 +135,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(147, 149);
+            button5.Location = new Point(147, 145);
             button5.Name = "button5";
             button5.Size = new Size(94, 29);
             button5.TabIndex = 11;
@@ -141,7 +145,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(720, 12);
+            button6.Location = new Point(723, 12);
             button6.Name = "button6";
             button6.Size = new Size(133, 27);
             button6.TabIndex = 12;
@@ -149,19 +153,34 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
-            // panel1
+            // button7
             // 
-            panel1.Location = new Point(-1, 472);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(263, 30);
-            panel1.TabIndex = 13;
+            button7.Location = new Point(12, 145);
+            button7.Name = "button7";
+            button7.Size = new Size(107, 29);
+            button7.TabIndex = 13;
+            button7.Text = "Excel export";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(410, 12);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(187, 27);
+            textBox3.TabIndex = 14;
+            // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(856, 505);
-            Controls.Add(panel1);
+            ClientSize = new Size(856, 447);
+            Controls.Add(textBox3);
+            Controls.Add(button7);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
@@ -176,6 +195,7 @@
             Controls.Add(textBox1);
             Name = "Form1";
             Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -194,6 +214,8 @@
         private Button button4;
         private Button button5;
         private Button button6;
-        private Panel panel1;
+        private Button button7;
+        private TextBox textBox3;
+        private ErrorProvider errorProvider1;
     }
 }
