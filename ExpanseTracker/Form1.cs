@@ -14,13 +14,14 @@ namespace ExpanseTracker
         private string dataFile = "expenses.json";
         bool isDarkMode = false;
         private ErrorProvider errorProvider = new ErrorProvider();
-
+        
         public Form1()
         {
             InitializeComponent();
             textBox1.PlaceholderText = "Enter name";
             textBox2.PlaceholderText = "Enter amount";
             textBox3.PlaceholderText = "Enter category";
+            comboBox1.SelectedIndex = 1;
             LoadExpenses();
             UpdateTotal();
         }
@@ -30,63 +31,94 @@ namespace ExpanseTracker
             public decimal Amount { get; set; }
             public DateTime Date { get; set; }
             public string Category { get; set; }
+            public string Currency { get; set; }
 
-            public Expense(string name, decimal amount, string category)
+            public Expense(string name, decimal amount, string category, string currency)
             {
                 Name = name;
                 Amount = amount;
                 Date = DateTime.Now;
                 Category = category;
+                Currency = currency;
             }
             public override string ToString()
             {
-                return $"{Date.ToShortDateString()} - {Name} - {Category} - {Amount}";
+                string symbol = Currency switch
+                {
+                    "USD" => "$",
+                    "EUR" => "ˆ",
+                    "UZS" => "so'm",
+                    _ => Currency
+                };
+
+                return $"{Date.ToShortDateString()} - {Name} | {Amount} {symbol} | {Category}";
             }
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string name = textBox1.Text;
-            string category = textBox3.Text;
+            string category = textBox3.Text.Trim();
             decimal amount;
+
             if (!decimal.TryParse(textBox2.Text, out amount))
             {
                 errorProvider.SetError(textBox2, "Please enter a valid amount");
                 return;
             }
-            bool hasLetter = false;
-            foreach (char c in name)
-            {
-                if (char.IsLetter(c))
-                {
-                    hasLetter = true;
-                    break;
-                }
-            }
-            if (!hasLetter)
+            if (string.IsNullOrWhiteSpace(name))
             {
                 errorProvider.SetError(textBox1, "Please enter a name");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                errorProvider.SetError(textBox3, "Please enter a category");
+                return;
+            }
+            // normalize category
+            category = char.ToUpper(category[0]) + category.Substring(1).ToLower();
 
-            Expense newExpense = new Expense(name, amount, category);
+            //That compares without distinguishing between uppercase and lowercase letters.
+            var existingCategory = expenses.FirstOrDefault(e =>
+                e.Category.Equals(category, StringComparison.OrdinalIgnoreCase)); 
+            if (existingCategory != null)
+            {
+                category = existingCategory.Category;
+            }
+            string currency = "USD";
+            if (comboBox1.SelectedIndex == 1) currency = "UZS";
+            else if (comboBox1.SelectedIndex == 2) currency = "EUR";
+
+            Expense newExpense = new Expense(name, amount, category, currency);
             expenses.Add(newExpense);
             listBox1.Items.Add(newExpense);
 
             SaveExpenses();
             UpdateTotal();
+            CheckMonthlyLimit();
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
         }
-
         private void UpdateTotal()
         {
-            decimal total = 0;
-            foreach (var exp in expenses)
+            decimal totalAll = expenses.Sum(exp => exp.Amount); // total of all expenses
+
+            string selectedCurrency = comboBox1.SelectedItem?.ToString() ?? "USD";
+            decimal totalCurrency = expenses
+                .Where(exp => exp.Currency == selectedCurrency)
+                .Sum(exp => exp.Amount);
+
+            string symbol = selectedCurrency switch
             {
-                total += exp.Amount;
-            }
-            label1.Text = $"Total: {total}";
+                "USD" => "$",
+                "EUR" => "ˆ",
+                "UZS" => "so'm",
+                _ => selectedCurrency
+            };
+
+            label1.Text = $"Total ({selectedCurrency}): {totalCurrency} {symbol} | Overall Total: {totalAll}";
         }
 
         private void SaveExpenses()
@@ -149,6 +181,7 @@ namespace ExpanseTracker
                 listBox1.Items.Remove(selectedExpense);
                 SaveExpenses();
                 UpdateTotal();
+                CheckMonthlyLimit();
             }
             else
             {
@@ -237,7 +270,7 @@ namespace ExpanseTracker
         public void ShowTooltip(string message)
         {
             ToolTip tooltip = new ToolTip();
-            tooltip.Show(message, this, 100, 50, 2000); // 2 seconds
+            tooltip.Show(message, this, 100, 50, 4000); 
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -265,7 +298,8 @@ namespace ExpanseTracker
                 ws.Cells[1, 1].Value = "Date";
                 ws.Cells[1, 2].Value = "Name";
                 ws.Cells[1, 3].Value = "Category";
-                ws.Cells[1, 4].Value = "Amount";
+                ws.Cells[1, 4].Value = $"Amount";
+                ws.Cells[1, 5].Value = "Currency";
 
                 int row = 2;
                 foreach (var exp in expenses)
@@ -274,6 +308,7 @@ namespace ExpanseTracker
                     ws.Cells[row, 2].Value = exp.Name;
                     ws.Cells[row, 3].Value = exp.Category;
                     ws.Cells[row, 4].Value = exp.Amount;
+                    ws.Cells[row, 5].Value = exp.Currency;
                     row++;
                 }
 
@@ -288,6 +323,48 @@ namespace ExpanseTracker
                         MessageBox.Show("Excel exported successfully!");
                     }
                 }
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(dataFile))
+            {
+                MessageBox.Show("No expenses found.");
+                return;
+            }
+            DateTime today = DateTime.Now;
+            decimal monthly = expenses.Where(exp => exp.Date.Year == today.Year && exp.Date.Month == today.Month)
+                .Sum(exp => exp.Amount);
+
+            DateTime startofweek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            DateTime endofweek = startofweek.AddDays(6);
+            decimal weekly = expenses
+                .Where(exp => exp.Date >= startofweek && exp.Date <= endofweek)
+                .Sum(exp => exp.Amount);
+            MessageBox.Show(
+                $"Weekly Total: {weekly} {comboBox1.Text}\nMonthly Total: {monthly} {comboBox1.Text}",
+                 "Expense Summary",
+                  MessageBoxButtons.OK,
+                  MessageBoxIcon.Information);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void CheckMonthlyLimit()
+        {
+            decimal monthlyTotal = expenses
+                    .Where(exp => exp.Date.Year == DateTime.Now.Year && exp.Date.Month == DateTime.Now.Month)
+                    .Sum(exp => exp.Amount);
+            if (monthlyTotal > numericUpDown1.Value)
+            {
+                MessageBox.Show(
+               $"Warning! Monthly expenses exceeded your limit of {monthlyTotal} {comboBox1.Text}.",
+               "Limit Exceeded",
+               MessageBoxButtons.OK,
+               MessageBoxIcon.Warning);
             }
         }
     }

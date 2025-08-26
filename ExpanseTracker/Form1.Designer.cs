@@ -44,7 +44,12 @@
             button7 = new Button();
             textBox3 = new TextBox();
             errorProvider1 = new ErrorProvider(components);
+            button8 = new Button();
+            comboBox1 = new ComboBox();
+            numericUpDown1 = new NumericUpDown();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // textBox1
@@ -56,14 +61,14 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(201, 12);
+            textBox2.Location = new Point(4, 58);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(174, 27);
             textBox2.TabIndex = 1;
             // 
             // button1
             // 
-            button1.Location = new Point(12, 78);
+            button1.Location = new Point(4, 145);
             button1.Name = "button1";
             button1.Size = new Size(87, 29);
             button1.TabIndex = 2;
@@ -74,15 +79,15 @@
             // listBox1
             // 
             listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(466, 58);
+            listBox1.Location = new Point(482, 58);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(378, 324);
+            listBox1.Size = new Size(362, 324);
             listBox1.TabIndex = 3;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(466, 401);
+            label1.Location = new Point(482, 399);
             label1.Name = "label1";
             label1.Size = new Size(50, 20);
             label1.TabIndex = 4;
@@ -91,7 +96,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(12, 210);
+            button3.Location = new Point(12, 238);
             button3.Name = "button3";
             button3.Size = new Size(107, 29);
             button3.TabIndex = 6;
@@ -101,21 +106,21 @@
             // 
             // dateTimePickerfrom
             // 
-            dateTimePickerfrom.Location = new Point(4, 256);
+            dateTimePickerfrom.Location = new Point(4, 283);
             dateTimePickerfrom.Name = "dateTimePickerfrom";
             dateTimePickerfrom.Size = new Size(250, 27);
             dateTimePickerfrom.TabIndex = 7;
             // 
             // dateTimePickerto
             // 
-            dateTimePickerto.Location = new Point(4, 326);
+            dateTimePickerto.Location = new Point(4, 325);
             dateTimePickerto.Name = "dateTimePickerto";
             dateTimePickerto.Size = new Size(250, 27);
             dateTimePickerto.TabIndex = 8;
             // 
             // button2
             // 
-            button2.Location = new Point(281, 78);
+            button2.Location = new Point(237, 145);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 9;
@@ -125,7 +130,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(147, 78);
+            button4.Location = new Point(114, 145);
             button4.Name = "button4";
             button4.Size = new Size(94, 29);
             button4.TabIndex = 10;
@@ -135,9 +140,9 @@
             // 
             // button5
             // 
-            button5.Location = new Point(147, 145);
+            button5.Location = new Point(150, 190);
             button5.Name = "button5";
-            button5.Size = new Size(94, 29);
+            button5.Size = new Size(124, 29);
             button5.TabIndex = 11;
             button5.Text = "Show Chart ";
             button5.UseVisualStyleBackColor = true;
@@ -155,7 +160,7 @@
             // 
             // button7
             // 
-            button7.Location = new Point(12, 145);
+            button7.Location = new Point(12, 190);
             button7.Name = "button7";
             button7.Size = new Size(107, 29);
             button7.TabIndex = 13;
@@ -165,20 +170,61 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(410, 12);
+            textBox3.Location = new Point(4, 103);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(187, 27);
+            textBox3.Size = new Size(174, 27);
             textBox3.TabIndex = 14;
             // 
             // errorProvider1
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // button8
+            // 
+            button8.Location = new Point(150, 238);
+            button8.Name = "button8";
+            button8.Size = new Size(124, 29);
+            button8.TabIndex = 15;
+            button8.Text = "Show Summary";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "USZ", "USD", "EUR" });
+            comboBox1.Location = new Point(276, 12);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(174, 28);
+            comboBox1.TabIndex = 16;
+            comboBox1.Text = "Currency";
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(276, 103);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(174, 27);
+            numericUpDown1.TabIndex = 17;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(276, 65);
+            label2.Name = "label2";
+            label2.Size = new Size(147, 20);
+            label2.TabIndex = 18;
+            label2.Text = "Set monthly limit 👇🏻";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(856, 447);
+            Controls.Add(label2);
+            Controls.Add(numericUpDown1);
+            Controls.Add(comboBox1);
+            Controls.Add(button8);
             Controls.Add(textBox3);
             Controls.Add(button7);
             Controls.Add(button6);
@@ -196,6 +242,7 @@
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -217,5 +264,9 @@
         private Button button7;
         private TextBox textBox3;
         private ErrorProvider errorProvider1;
+        private Button button8;
+        private ComboBox comboBox1;
+        private NumericUpDown numericUpDown1;
+        private Label label2;
     }
 }
