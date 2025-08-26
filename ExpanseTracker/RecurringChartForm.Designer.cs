@@ -1,6 +1,6 @@
 ﻿namespace ExpanseTracker
 {
-    partial class Chart
+    partial class RecurringChartForm
     {
         /// <summary>
         /// Required designer variable.
@@ -41,24 +41,25 @@
             chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             chart1.Legends.Add(legend1);
-            chart1.Location = new Point(2, 12);
+            chart1.Location = new Point(26, 25);
             chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             chart1.Series.Add(series1);
-            chart1.Size = new Size(614, 383);
+            chart1.Size = new Size(537, 375);
             chart1.TabIndex = 0;
             chart1.Text = "chart1";
+            chart1.Click += chart1_Click;
             // 
-            // Chart
+            // RecurringChartForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(914, 584);
+            ClientSize = new Size(800, 450);
             Controls.Add(chart1);
-            Name = "Chart";
-            Text = "Chart";
+            Name = "RecurringChartForm";
+            Text = "RecurringChartForm";
             ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
             ResumeLayout(false);
         }

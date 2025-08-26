@@ -48,6 +48,7 @@
             comboBox1 = new ComboBox();
             numericUpDown1 = new NumericUpDown();
             label2 = new Label();
+            button9 = new Button();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
@@ -106,14 +107,14 @@
             // 
             // dateTimePickerfrom
             // 
-            dateTimePickerfrom.Location = new Point(4, 283);
+            dateTimePickerfrom.Location = new Point(4, 296);
             dateTimePickerfrom.Name = "dateTimePickerfrom";
             dateTimePickerfrom.Size = new Size(250, 27);
             dateTimePickerfrom.TabIndex = 7;
             // 
             // dateTimePickerto
             // 
-            dateTimePickerto.Location = new Point(4, 325);
+            dateTimePickerto.Location = new Point(4, 344);
             dateTimePickerto.Name = "dateTimePickerto";
             dateTimePickerto.Size = new Size(250, 27);
             dateTimePickerto.TabIndex = 8;
@@ -140,9 +141,9 @@
             // 
             // button5
             // 
-            button5.Location = new Point(150, 190);
+            button5.Location = new Point(114, 190);
             button5.Name = "button5";
-            button5.Size = new Size(124, 29);
+            button5.Size = new Size(94, 29);
             button5.TabIndex = 11;
             button5.Text = "Show Chart ";
             button5.UseVisualStyleBackColor = true;
@@ -150,7 +151,7 @@
             // 
             // button6
             // 
-            button6.Location = new Point(723, 12);
+            button6.Location = new Point(727, 12);
             button6.Name = "button6";
             button6.Size = new Size(133, 27);
             button6.TabIndex = 12;
@@ -160,9 +161,9 @@
             // 
             // button7
             // 
-            button7.Location = new Point(12, 190);
+            button7.Location = new Point(4, 190);
             button7.Name = "button7";
-            button7.Size = new Size(107, 29);
+            button7.Size = new Size(87, 29);
             button7.TabIndex = 13;
             button7.Text = "Excel export";
             button7.UseVisualStyleBackColor = true;
@@ -206,6 +207,7 @@
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(174, 27);
             numericUpDown1.TabIndex = 17;
+            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
             // label2
             // 
@@ -216,11 +218,22 @@
             label2.TabIndex = 18;
             label2.Text = "Set monthly limit 👇🏻";
             // 
+            // button9
+            // 
+            button9.Location = new Point(237, 190);
+            button9.Name = "button9";
+            button9.Size = new Size(94, 29);
+            button9.TabIndex = 19;
+            button9.Text = "Recurring expenses";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(856, 447);
+            ClientSize = new Size(856, 440);
+            Controls.Add(button9);
             Controls.Add(label2);
             Controls.Add(numericUpDown1);
             Controls.Add(comboBox1);
@@ -268,5 +281,6 @@
         private ComboBox comboBox1;
         private NumericUpDown numericUpDown1;
         private Label label2;
+        private Button button9;
     }
 }

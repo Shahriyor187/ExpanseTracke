@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ExpanseTracker
 {
@@ -14,7 +15,9 @@ namespace ExpanseTracker
         private string dataFile = "expenses.json";
         bool isDarkMode = false;
         private ErrorProvider errorProvider = new ErrorProvider();
-        
+        private System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+        private List<RecurringForm.RecurringExpense> recurrings = new List<RecurringForm.RecurringExpense>();
+
         public Form1()
         {
             InitializeComponent();
@@ -22,8 +25,19 @@ namespace ExpanseTracker
             textBox2.PlaceholderText = "Enter amount";
             textBox3.PlaceholderText = "Enter category";
             comboBox1.SelectedIndex = 1;
+            tooltip.SetToolTip(button1, "Add a new expense");
+            tooltip.SetToolTip(button2, "Delete the selected expense");
+            tooltip.SetToolTip(button4, "Edit the selected expense");
+            tooltip.SetToolTip(button5, "View expenses in a chart");
+            tooltip.SetToolTip(button6, "Toggle Dark/Light mode");
+            tooltip.SetToolTip(button7, "Export expenses to Excel");
+            tooltip.SetToolTip(button8, "Show weekly and monthly totals");
+            tooltip.SetToolTip(button9, "Manage recurring expenses");
+            tooltip.SetToolTip(numericUpDown1, "Set your monthly expense limit");
+
             LoadExpenses();
             UpdateTotal();
+            LoadRecurringExpensesToList();
         }
         public class Expense
         {
@@ -81,7 +95,7 @@ namespace ExpanseTracker
 
             //That compares without distinguishing between uppercase and lowercase letters.
             var existingCategory = expenses.FirstOrDefault(e =>
-                e.Category.Equals(category, StringComparison.OrdinalIgnoreCase)); 
+                e.Category.Equals(category, StringComparison.OrdinalIgnoreCase));
             if (existingCategory != null)
             {
                 category = existingCategory.Category;
@@ -97,6 +111,7 @@ namespace ExpanseTracker
             SaveExpenses();
             UpdateTotal();
             CheckMonthlyLimit();
+            LoadRecurringExpensesToList();
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
@@ -214,9 +229,9 @@ namespace ExpanseTracker
         {
             Chart chartform = new Chart(isDarkMode);
             chartform.LoadData(expenses);
-            chartform.ShowDialog();
-        }
+            chartform.Show();
 
+        }
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -242,7 +257,7 @@ namespace ExpanseTracker
                 {
                     ctrl.ForeColor = Color.White;
 
-                    if (ctrl is Button)
+                    if (ctrl is System.Windows.Forms.Button)
                         ctrl.BackColor = Color.FromArgb(45, 45, 45);
                     else if (ctrl is ListBox)
                         ctrl.BackColor = Color.FromArgb(40, 40, 40);
@@ -254,7 +269,7 @@ namespace ExpanseTracker
                 {
                     ctrl.ForeColor = Color.Black;
 
-                    if (ctrl is Button)
+                    if (ctrl is System.Windows.Forms.Button)
                         ctrl.BackColor = SystemColors.Control;
                     else if (ctrl is ListBox)
                         ctrl.BackColor = Color.White;
@@ -269,8 +284,8 @@ namespace ExpanseTracker
         }
         public void ShowTooltip(string message)
         {
-            ToolTip tooltip = new ToolTip();
-            tooltip.Show(message, this, 100, 50, 4000); 
+            System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
+            tooltip.Show(message, this, 100, 50, 4000);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -365,6 +380,26 @@ namespace ExpanseTracker
                "Limit Exceeded",
                MessageBoxButtons.OK,
                MessageBoxIcon.Warning);
+            }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            RecurringForm form = new RecurringForm(isDarkMode);
+            form.Show();
+        }
+        private void LoadRecurringExpensesToList()
+        {
+            string json = File.ReadAllText("recurring.json");
+            List<RecurringForm.RecurringExpense> recurringList = JsonSerializer.Deserialize<List<RecurringForm.RecurringExpense>>(json);
+            foreach(var exp in recurringList)
+            {
+                listBox1.Items.Add(exp);
             }
         }
     }

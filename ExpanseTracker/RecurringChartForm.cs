@@ -9,14 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using static ExpanseTracker.Form1;
 
 namespace ExpanseTracker
 {
-    public partial class Chart : Form
+    public partial class RecurringChartForm : Form
     {
-
-        public Chart(bool darkmode)
+        public RecurringChartForm(bool darkmode)
         {
             InitializeComponent();
             if (darkmode)
@@ -30,10 +28,11 @@ namespace ExpanseTracker
                 this.ForeColor = Color.Black;
             }
         }
-        public void LoadData(List<Expense> expenses)
+        public void RecurLoadData(List<RecurringForm.RecurringExpense> recurexpenses)
         {
             chart1.Series.Clear();
-            Series series = new Series("Expenses by Category")
+
+            Series series = new Series("Recurring Expenses by Category")
             {
                 ChartType = SeriesChartType.Pie,
                 IsValueShownAsLabel = true,
@@ -46,7 +45,7 @@ namespace ExpanseTracker
 
             chart1.Series.Add(series);
 
-            var grouped = expenses
+            var grouped = recurexpenses
                 .GroupBy(e => e.Category)
                 .Select(g => new { Category = g.Key, Total = g.Sum(e => e.Amount) })
                 .OrderBy(x => x.Category);
@@ -57,7 +56,6 @@ namespace ExpanseTracker
                 series.Points[pointIndex].LegendText = item.Category;
             }
         }
-
         private void chart1_Click(object sender, EventArgs e)
         {
 
