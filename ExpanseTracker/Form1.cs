@@ -2,9 +2,11 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using static ExpanseTracker.RecurringForm;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ExpanseTracker
@@ -17,7 +19,7 @@ namespace ExpanseTracker
         private ErrorProvider errorProvider = new ErrorProvider();
         private System.Windows.Forms.ToolTip tooltip = new System.Windows.Forms.ToolTip();
         private List<RecurringForm.RecurringExpense> recurrings = new List<RecurringForm.RecurringExpense>();
-
+        public decimal totalBalance = 0;
         public Form1()
         {
             InitializeComponent();
@@ -69,6 +71,7 @@ namespace ExpanseTracker
             }
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
             string name = textBox1.Text;
@@ -119,7 +122,8 @@ namespace ExpanseTracker
         private void UpdateTotal()
         {
             decimal totalAll = expenses.Sum(exp => exp.Amount); // total of all expenses
-
+            decimal recurringTotal = recurrings.Sum(r => r.GetTotalAmount());
+            totalBalance = recurringTotal + totalAll;
             string selectedCurrency = comboBox1.SelectedItem?.ToString() ?? "USD";
             decimal totalCurrency = expenses
                 .Where(exp => exp.Currency == selectedCurrency)
@@ -133,7 +137,7 @@ namespace ExpanseTracker
                 _ => selectedCurrency
             };
 
-            label1.Text = $"Total ({selectedCurrency}): {totalCurrency} {symbol} | Overall Total: {totalAll}";
+            label1.Text = $"Total ({selectedCurrency}): {totalCurrency} {symbol} | Overall Total: {totalBalance}";
         }
 
         private void SaveExpenses()
@@ -163,6 +167,7 @@ namespace ExpanseTracker
                     {
                         listBox1.Items.Add(exp);
                     }
+                    UpdateTotal();
                 }
                 catch (Exception ex)
                 {
@@ -390,16 +395,33 @@ namespace ExpanseTracker
 
         private void button9_Click(object sender, EventArgs e)
         {
-            RecurringForm form = new RecurringForm(isDarkMode);
-            form.Show();
+            using (RecurringForm form = new RecurringForm(isDarkMode))
+            {
+                form.ShowDialog();     
+            }
+            LoadRecurringExpensesToList(); 
+            UpdateTotal();                 
         }
+
         private void LoadRecurringExpensesToList()
         {
-            string json = File.ReadAllText("recurring.json");
-            List<RecurringForm.RecurringExpense> recurringList = JsonSerializer.Deserialize<List<RecurringForm.RecurringExpense>>(json);
-            foreach(var exp in recurringList)
+            try
             {
-                listBox1.Items.Add(exp);
+                string fullPath = Path.Combine(Application.StartupPath, "recurring.json");
+
+                string json = File.ReadAllText(fullPath);
+                recurrings = JsonSerializer.Deserialize<List<RecurringForm.RecurringExpense>>(json)
+                             ?? new List<RecurringForm.RecurringExpense>();
+               
+                listBox1.Items.Clear();
+                foreach (var e in expenses) listBox1.Items.Add(e);
+                foreach (var r in recurrings) listBox1.Items.Add(r);
+
+                UpdateTotal();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading recurring data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

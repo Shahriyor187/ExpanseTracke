@@ -44,17 +44,36 @@ namespace ExpanseTracker
             public decimal Amount { get; set; }
             public string Category { get; set; }
             public string Currency { get; set; }
-            public string Frequency { get; set; } // Daily, Weekly, Monthly
-
-            public RecurringExpense(string name, decimal amount, string category, string currency, string frequency)
+            public string Frequency { get; set; }
+            public DateTime CreatedDate { get; set; } = DateTime.Today;
+            public RecurringExpense(string name, decimal amount, string category, string currency, string frequency, DateTime createddate)
             {
                 Name = name;
                 Amount = amount;
                 Category = category;
                 Currency = currency;
                 Frequency = frequency;
+                CreatedDate = createddate;
             }
+            public decimal GetTotalAmount()
+            {
+                var freq = (Frequency ?? "").ToLowerInvariant().Trim();
+                var today = DateTime.Today;
+                var created = CreatedDate.Date;
+                if (created == default(DateTime) || created.Year < 2000)
+                    created = DateTime.Today;
 
+                int count = 0;
+                if (freq == "daily")
+                    count = (today - created).Days + 1;
+                else if (freq == "weekly")
+                    count = ((today - created).Days / 7) + 1;
+                else if (freq == "monthly")
+                    count = ((today.Year - created.Year) * 12 + today.Month - created.Month) + 1;
+
+                if (count < 0) count = 0;
+                return Amount * count;
+            }
             public override string ToString()
             {
                 return $"{Name} | {Amount} {Currency} | {Category} | {Frequency}";
@@ -92,8 +111,9 @@ namespace ExpanseTracker
             string currency = "USD";
             if (comboBox1.SelectedIndex == 1) currency = "UZS";
             else if (comboBox1.SelectedIndex == 2) currency = "EUR";
-            string frequency = comboBox2.SelectedItem?.ToString() ?? "Monthly";
-            RecurringExpense newRecurring = new RecurringExpense(name, amount, category, currency, frequency);
+            string frequency = (comboBox2.SelectedItem?.ToString() ?? "monthly").ToLower();
+            DateTime createddate = DateTime.Now;
+            RecurringExpense newRecurring = new RecurringExpense(name, amount, category, currency, frequency, createddate);
             recurringExpenses.Add(newRecurring);
             listBox1.Items.Add(newRecurring);
             // Save to file
@@ -104,15 +124,30 @@ namespace ExpanseTracker
         }
         private void SaveRecurringExpenses()
         {
-            string json = JsonSerializer.Serialize(recurringExpenses, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(recurringFile, json);
+            try
+            {
+                string json = JsonSerializer.Serialize(recurringExpenses, new JsonSerializerOptions { WriteIndented = true });
+                string fullPath = Path.Combine(Application.StartupPath, recurringFile);
+                File.WriteAllText(fullPath, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving recurring data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
         private void LoadRecurringExpenses()
         {
             if (File.Exists(recurringFile))
             {
                 string json = File.ReadAllText(recurringFile);
-                recurringExpenses = JsonSerializer.Deserialize<List<RecurringExpense>>(json);
+                recurringExpenses = JsonSerializer.Deserialize<List<RecurringExpense>>(json) ?? new List<RecurringExpense>();
+                foreach (var r in recurringExpenses)
+                {
+                    if (r.CreatedDate == default(DateTime))
+                        r.CreatedDate = DateTime.Today;
+                }
+
                 listBox1.Items.Clear();
                 foreach (var r in recurringExpenses)
                 {
@@ -124,6 +159,7 @@ namespace ExpanseTracker
                 recurringExpenses = new List<RecurringExpense>();
             }
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {

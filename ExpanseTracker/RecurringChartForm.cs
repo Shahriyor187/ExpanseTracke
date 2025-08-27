@@ -14,6 +14,7 @@ namespace ExpanseTracker
 {
     public partial class RecurringChartForm : Form
     {
+        private RecurringForm recurringForm;
         public RecurringChartForm(bool darkmode)
         {
             InitializeComponent();
